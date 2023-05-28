@@ -3,7 +3,7 @@ import { GraphQLClient, gql } from "graphql-request"
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const graphqlClient = new GraphQLClient(graphqlAPI, {
     headers: {
       authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`
@@ -11,7 +11,12 @@ export default function handler(req, res) {
   })
 
   const query = gql`
-    mutation CreateComment($name: String!, $email: String!, $comment: String!, $slug: String!) {
+    mutation CreateComment(
+      $name: String!, 
+      $email: String!, 
+      $comment: String!, 
+      $slug: String!,
+    ) {
       createComment(data: {
         name: $name, 
         email: $email, 

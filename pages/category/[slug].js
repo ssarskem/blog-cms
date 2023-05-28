@@ -1,10 +1,8 @@
 import Head from "next/head";
-import { getPosts } from '@/services';
-import PostCard from "@/components/PostCard";
-import PostWidget from "@/components/PostWidget";
-import { Categories } from "@/components";
+import { Categories, PostCard, PostWidget } from "@/components";
+import { getCategoryPosts } from "@/services";
 
-export default function Home({ posts }) {
+export default function CategoryPage({ posts }) {
   return (
     <div className="container mx-auto px-10 mb-8">
       <Head>
@@ -30,9 +28,8 @@ export default function Home({ posts }) {
   )
 }
 
-export const getStaticProps = async() => {
-  const posts = await getPosts() || [];
-
+export const getServerSideProps = async({ params }) => {
+  const posts = await getCategoryPosts(params.slug) || [];
   return {
     props: {
       posts

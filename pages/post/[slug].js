@@ -1,5 +1,5 @@
 import { getPostDetails } from '@/services';
-import { Author, CommentsForm, PostDetail } from '@/components';
+import { Author, CommentsForm, PostDetail, Comments, PostWidget } from '@/components';
 import React from 'react'
 
 const PostDetails = ({ post }) => {
@@ -10,8 +10,17 @@ const PostDetails = ({ post }) => {
           <PostDetail post={post} />
           <Author author={post.author} />
           <CommentsForm slug={post.slug} />
-          {/* CommentForm */}
-          {/* Comments */}
+          <Comments slug={post.slug} />
+        </div>
+        <div className='col-span-1 lg:col-span-4'>
+          <div className='relative lg:sticky top-8'>
+            <PostWidget 
+              slug={post.slug}
+              categories={post.categories.map((category) => (
+                category.slug
+              ))}
+            />
+          </div>
         </div>
       </div>
     </div>

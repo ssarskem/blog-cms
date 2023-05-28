@@ -1,12 +1,36 @@
 import React, { useRef, useState } from 'react'
+import { submitComment } from '@/services';
 
-const CommentsForm = () => {
-  const { error, setError } = useState(false);
-  const { showSuccessMessage, setShowSuccessMessage } = useState(false);
+const CommentsForm = ({slug}) => {
+  const [ error, setError ] = useState(false);
+  const [ showSuccessMessage, setShowSuccessMessage ] = useState(false);
 
   const nameEl = useRef();
   const emailEl = useRef();
   const commentEl = useRef();
+
+  const handleCommentSubmit = () => {
+    setError(false);
+    const {value: comment} = commentEl.current;
+    const {value: name} = nameEl.current;
+    const {value: email} = emailEl.current;
+    if (!comment || !name || !email) {
+      setError(true);
+      return;
+    }
+    const commentData = {
+      name,
+      email,
+      comment,
+      slug,
+    };
+    submitComment(commentData).then((res) => {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+    });
+  };
 
   return (
     <div className='bg-white shadow-lg rounded-lg p-8 pb-12 mb-8'>
@@ -37,7 +61,11 @@ const CommentsForm = () => {
       </div>
       {error && <p className='text-xs text-red-500'>すべての項目をご記載ください。</p>}
       <div className='mt-8'>
-        <button className="transition duration-500 ease-in hover:bg-indigo-900 inline-block bg-pink-600 text-lg rounded-full text-white px-8 py-3 curosor-pointer">
+        <button 
+          type="button"
+          onClick={handleCommentSubmit}
+          className="transition duration-500 ease-in hover:bg-indigo-900 inline-block bg-pink-600 text-lg rounded-full text-white px-8 py-3 curosor-pointer"
+        >
           コメントを投稿する
         </button>
         {showSuccessMessage && (
